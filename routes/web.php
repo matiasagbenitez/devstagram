@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PostController;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// INDEX
+// LANDING PAGE
 Route::get('/', function() {
     return view('principal');
 });
@@ -28,4 +29,10 @@ Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 // LOGOUT
 Route::post('/logout', [LogoutController::class, 'store'])->name('logout');
 
-Route::get('/wall', [PostController::class, 'index'])->name('posts.index');
+// POSTS
+Route::get('/{user:username}', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+
+// IMAGE
+Route::post('/images', [ImageController::class, 'store'])->name('images.store');
