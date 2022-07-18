@@ -6,6 +6,7 @@
 
 @section('content')
 
+    {{-- PARTE SUPERIOR --}}
     <div class="flex justify-center">
         <div class="w-full md:w-8/12 lg:w-6/12 flex flex-col items-center md:flex-row">
 
@@ -23,5 +24,28 @@
 
         </div>
     </div>
+
+    {{-- PUBLICACIONES --}}
+    <section class="container mx-auto mt-10">
+        <h2 class="text-xl text-center font-black my-10">Posts</h2>
+
+        @if ($posts->count())
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                @foreach ($posts as $post)
+                <div class="">
+                    <a href="">
+                        <img src="{{ asset('uploads').'/'.$post->image }}" alt="Imagen del post {{ $post->title }}">
+                    </a>
+                </div>
+                @endforeach
+            </div>
+            <div class="mt-5">
+                {{ $posts->links()}}
+            </div>
+        @else
+            <p class="text-gray-600 text-sm text-center font-bold">No posts to show</p>
+        @endif
+
+    </section>
 
 @endsection
