@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="md:flex md:justify-center">
+    <div class="md:flex md:justify-center mt-5">
         <div class="md:w-1/2 bg-white shadow p-6">
             <form method="POST" action="{{ route('posts.update', [$post->user, $post]) }}" class="mt-10 md:mt-0">
                 @csrf

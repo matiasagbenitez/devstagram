@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="container mx-auto md:flex">
+    <div class="container mx-auto md:flex mt-5">
 
         {{-- Contenedor izquierda --}}
         <div class="md:w-1/2">
@@ -14,22 +14,21 @@
         </div>
 
         {{-- Contenedor derecha --}}
-        <div class="md:w-1/2 px-5">
+        <div class="md:w-1/2 md:px-5">
             <div class="shadow bg-white p-3 mb-3">
 
                 {{-- Usuario, fecha de creación y descripción --}}
-                <div>
+                <div class="p-2">
                     <div class="mx-auto flex justify-between items-center">
-                        <div class="flex gap-2">
+                        <div class="flex gap-2 items-center">
                             <a href="{{ route('posts.index', $post->user->username)}}">
-                                {{-- <img class="imagen-perfil h-8 w-8" src="{{ $user->imagen ? asset('perfiles').'/'.$user->imagen : asset('img/usuario.svg') }}" alt="Imagen usuario"> --}}
-                                <img class="imagen-perfil h-8 w-8" src="{{ asset('img/default-user-icon.jpg') }}" alt="User icon">
+                                <img class="imagen-perfil h-8 w-8" src="{{ $user->image ? asset('profiles').'/'.$user->image : asset('img/default-user-icon.jpg') }}" alt="Imagen usuario">
                             </a>
                             <a href="{{ route('posts.index', $post->user->username) }}" class="font-bold">{{ $post->user->username }}</a>
                         </div>
                         @auth
                             @if ($post->user_id === auth()->user()->id)
-                                <div class="flex flex-row-reverse gap-3 items-center">
+                                <div class="flex flex-row-reverse gap-3 place-content-center">
                                     {{-- Eliminar --}}
                                     <form method="POST" action="{{ route('posts.destroy', $post) }}">
                                         @method('DELETE')   {{-- Método spoofing --}}
@@ -105,8 +104,7 @@
                                 {{-- Imagen perfil --}}
                                 <div class="md:w-1/12">
                                     <a href="{{ route('posts.index', $comment->user)}}">
-                                        {{-- <img class="imagen-perfil h-8 w-8" src="{{ $comentario->user->imagen ? asset('perfiles').'/'.$comentario->user->imagen : asset('img/usuario.svg') }}" alt="Imagen usuario"> --}}
-                                        <img class="imagen-perfil h-8 w-8"  src="{{ asset('img/default-user-icon.jpg') }}" alt="User icon">
+                                        <img class="imagen-perfil h-8 w-8" src="{{ $comment->user->image ? asset('profiles').'/'.$comment->user->image : asset('img/default-user-icon.jpg') }}" alt="Imagen usuario">
                                     </a>
                                 </div>
                                 {{-- Contenido --}}

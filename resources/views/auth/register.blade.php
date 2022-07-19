@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="md:flex md:justify-center md:items-center">
+    <div class="md:flex md:justify-center md:items-center mt-5">
 
         {{-- IMAGEN --}}
         <div class="md:w-7/12 shadow">

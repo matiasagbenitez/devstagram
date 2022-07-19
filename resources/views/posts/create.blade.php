@@ -9,7 +9,7 @@
 @endpush
 
 @section('content')
-    <div class="md:flex md:items-center">
+    <div class="md:flex md:items-center mt-5">
 
         {{-- DROPZONE --}}
         <div class="md:w-1/2 px-10">

@@ -12,13 +12,13 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->except(['show']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
     // Página principal de un perfil
     public function index(User $user)
     {
-        $posts = Post::where('user_id', $user->id)->paginate(8);
+        $posts = Post::where('user_id', $user->id)->latest()->paginate(8);
 
         return view('dashboard', compact('user', 'posts'));
     }

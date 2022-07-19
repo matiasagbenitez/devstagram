@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 class LoginController extends Controller
 {
     public function index() {
+
+        if (auth()->user()) {
+            return redirect()->route('home');
+        }
+
         return view('auth.login');
     }
 
