@@ -26,6 +26,7 @@
                             </a>
                             <a href="{{ route('posts.index', $post->user->username) }}" class="font-bold">{{ $post->user->username }}</a>
                         </div>
+
                         @auth
                             @if ($post->user_id === auth()->user()->id)
                                 <div class="flex flex-row-reverse gap-3 place-content-center">
@@ -48,91 +49,82 @@
                                 </div>
                             @endif
                         @endauth
+
                     </div>
                     <p class="mt-3">{{ $post->description }}</p>
-                    <p class="text-sm text-gray-500 mt-3">{{ $post->created_at->diffForHumans() }}</p>
                 </div>
 
                 {{-- Likes --}}
-                <div class="border-b flex items-center gap-3">
-                    @auth
+                <div class="border-b flex items-center gap-3 px-2">
 
-                        @if ($post->checkLike(auth()->user()))
-                            <form method="POST" action=" {{ route('posts.likes.destroy', $post) }} ">
-                                @method('DELETE')
-                                @csrf
-                                <div class="my-4">
-                                    <button type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="red" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </form>
+                    <div class="mx-auto flex items-center gap-3 ml-0">
+                        @auth
+                            @if ($post->checkLike(auth()->user()))
+                                <form method="POST" action=" {{ route('posts.likes.destroy', $post) }} ">
+                                    @method('DELETE')
+                                    @csrf
+                                    <div class="my-4">
+                                        <button type="submit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="red" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </form>
+                            @else
+                                <form method="POST" action=" {{ route('posts.likes.store', $post) }} ">
+                                    @csrf
+                                    <div class="my-4">
+                                        <button type="submit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="white" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </form>
+                            @endif
+
+                        @endauth
+
+                        {{-- Cantidad de me gustas --}}
+                        @if ($post->likes->count() != 1)
+                            <p class="font-bold"> {{ $post->likes->count() }} likes</p>
                         @else
-                            <form method="POST" action=" {{ route('posts.likes.store', $post) }} ">
-                                @csrf
-                                <div class="my-4">
-                                    <button type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="white" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </form>
+                            <p class="font-bold"> {{ $post->likes->count() }} like</p>
                         @endif
+                    </div>
 
-                    @endauth
-
-                    {{-- Cantidad de me gustas --}}
-                    @if ($post->likes->count() != 1)
-                        <p class="font-bold"> {{ $post->likes->count() }} likes</p>
-                    @else
-                        <p class="font-bold"> {{ $post->likes->count() }} like</p>
-                    @endif
+                    {{-- Fecha de publicación --}}
+                    <div>
+                        <p class="text-sm text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
+                    </div>
 
                 </div>
 
+                <p class="text-center py-2 border-b text-sm text-gray-600">Post's comments</p>
 
                 {{-- Comentarios --}}
-                <div class="bg-white shadow mb-5 mt-5 max-h-72 overflow-y-scroll">
+                <div class="bg-white shadow mb-5 max-h-72 overflow-y-scroll">
                     @if ($post->comments->count())
                         @foreach ($post->comments as $comment)
 
                         {{-- DIV COMENTARIO --}}
-                            <div class="p-3 border-gray-300 border-b text-sm flex">
-                                {{-- Imagen perfil --}}
-                                <div class="md:w-1/12">
-                                    <a href="{{ route('posts.index', $comment->user)}}">
-                                        <img class="imagen-perfil h-8 w-8" src="{{ $comment->user->image ? asset('profiles').'/'.$comment->user->image : asset('img/default-user-icon.jpg') }}" alt="Imagen usuario">
-                                    </a>
-                                </div>
-                                {{-- Contenido --}}
-                                <div class="md:w-10/12 text-justify">
-                                    <a href="{{ route('posts.index', $comment->user)}}" class="font-bold">
-                                        {{ $comment->user->username }}
-                                    </a>
-                                    <p class="break-all">{{ $comment->comment }}</p>
-                                    <p class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
-                                </div>
+                            <div class="p-3 border-gray-300 border-b text-sm">
 
-                                {{-- Eliminar --}}
-                                @auth
-                                    @if ($post->user_id === auth()->user()->id)
-                                        <div class="md:w-1/12 flex flex-row-reverse">
-                                            <form method="POST" action=" {{ route('comments.destroy', $comment) }} ">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 svgEliminar" viewBox="0 0 20 20" fill="gray">
-                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    @else
-                                        @if ($comment->user->id === auth()->user()->id)
-                                            <div class="md:w-1/12 flex flex-row-reverse">
+                                {{-- SUPERIOR --}}
+                                <div class="mx-auto flex justify-between items-center">
+
+                                    {{-- Foto de perfil y nombre de usuario--}}
+                                    <div class="flex gap-2 items-center">
+                                        <a href="{{ route('posts.index', $comment->user)}}">
+                                            <img class="imagen-perfil h-8 w-8" src="{{ $comment->user->image ? asset('profiles').'/'.$comment->user->image : asset('img/default-user-icon.jpg') }}" alt="Imagen usuario">
+                                        </a>
+                                        <a href="{{ route('posts.index', $comment->user)}}" class="font-bold">{{ $comment->user->username }}</a>
+                                    </div>
+
+                                    @auth
+                                        @if ($post->user_id === auth()->user()->id || $comment->user->id === auth()->user()->id)
+                                            <div>
                                                 <form method="POST" action=" {{ route('comments.destroy', $comment) }} ">
                                                     @method('DELETE')
                                                     @csrf
@@ -144,8 +136,15 @@
                                                 </form>
                                             </div>
                                         @endif
-                                    @endif
-                                @endauth
+                                    @endauth
+
+                                </div> {{-- Fin superior --}}
+
+                                {{-- INFERIOR --}}
+                                <div class="text-justify">
+                                    <p class="break-all py-2">{{ $comment->comment }}</p>
+                                    <p class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
+                                </div>
 
                             </div>
 
@@ -171,7 +170,7 @@
                                 id="comment"
                                 name="comment"
                                 placeholder="Post comment..."
-                                class="border p-1 w-full rounded-lg @error('comment') border-red-500 @enderror"
+                                class="border p-1 mt-1 w-full rounded-lg @error('comment') border-red-500 @enderror"
                                 rows="2"
                             ></textarea>
 
