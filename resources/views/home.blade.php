@@ -11,20 +11,23 @@
         @if ($posts->count())
             <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 @foreach ($posts as $post)
-                    <div class="border-b">
+                    <div class="border-b bg-white md:rounded-lg ">
+
+                        <div class="flex gap-2 items-center p-2">
+                            <a href="{{ route('posts.index', $post->user)}}">
+                                <img class="imagen-perfil h-8 w-8" src="{{ $post->user->image ? asset('profiles').'/'.$post->user->image : asset('img/default-user-icon.jpg') }}" alt="Imagen usuario">
+                            </a>
+                            <a href="{{ route('posts.index', $post->user)}}" class="font-bold text-sm">{{ $post->user->username }}</a>
+                        </div>
+
                         <div>
                             <a href="{{ route('posts.show', ['user' => $post->user, 'post' => $post]) }}">
-                                <img class="md:rounded-lg hover:shadow-lg" src="{{ asset('uploads'.'/'.$post->image) }}" alt="Imagen del post {{ $post->title }}">
+                                <img class="hover:shadow-lg" src="{{ asset('uploads'.'/'.$post->image) }}" alt="Imagen del post {{ $post->title }}">
                             </a>
                         </div>
 
                         {{-- Image footer --}}
-                        <div class="mb-2 gap-2 flex place-content-between p-2">
-
-                            {{-- Nombre de usuario --}}
-                            <a href="{{ route('posts.index', $post->user->username)}}">
-                                <p class="mt-1 text-sm hover:cursor-pointer hover:underline hover:font-bold">{{ $post->user->username }}</p>
-                            </a>
+                        <div class="gap-2 flex place-content-between p-2">
 
                             <div class="flex gap-2">
                                 @if ($post->checkLike(auth()->user()))

@@ -16,8 +16,10 @@
 
     {{-- HEADER --}}
     <header class="p-3 border-b bg-white shadow">
-        <div class="container mx-auto flex justify-between items-center">
-            <a class="text-3xl font-normal" href="{{ route('home') }}"> <span class="font-black">Dev</span>Stagram</a>
+
+        <div class="container mx-auto flex flex-col justify-center md:flex-row md:justify-between items-center">
+
+            <a class="text-3xl font-normal mb-3 md:mb-0" href="{{ route('home') }}"> <span class="font-black">Dev</span>Stagram</a>
 
             @if (auth()->user())
                 <nav class="flex gap-4 items-center">
